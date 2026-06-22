@@ -4,3 +4,8 @@ plugins:
 inherit_mode:
   merge:
     - Exclude
+
+# This is a gem, not a Rails app: there's no :environment task to depend on.
+Rails/RakeEnvironment:
+  Exclude:
+    - Rakefile
