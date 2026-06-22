@@ -2,6 +2,7 @@
 
 require "rails/generators/testing/behavior"
 require "rails/generators/testing/assertions"
+require "minitest"
 require "minitest/assertions"
 require "fileutils"
 

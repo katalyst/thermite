@@ -1,0 +1,16 @@
+Description:
+    Installs Solid Cable using a single, shared database (Katalyst's preferred setup).
+
+    Unlike `solid_cable:install`, this does not provision a separate cable
+    database. The solid_cable tables are added to the primary database via a
+    normal migration in db/migrate, and config/cable.yml uses the solid_cable
+    adapter without a `connects_to` configuration.
+
+    Requires the solid_cable gem to be present in the host application.
+
+Example:
+    bin/rails thermite:install:solid_cable
+
+    This will:
+        Create config/cable.yml
+        Create a db/migrate migration for the solid_cable tables

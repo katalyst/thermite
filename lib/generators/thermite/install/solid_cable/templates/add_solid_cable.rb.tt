@@ -1,0 +1,7 @@
+# frozen_string_literal: true
+
+class <%= migration_class_name %> < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+  def change
+<%= solid_cable_schema_body.chomp %>
+  end
+end

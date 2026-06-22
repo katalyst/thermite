@@ -11,5 +11,10 @@ namespace :thermite do
     task :active_storage do
       Rails::Command.invoke :generate, ["thermite:install:active_storage"]
     end
+
+    desc "Install Solid Cable"
+    task :solid_cable do
+      Rails::Command.invoke :generate, ["thermite:install:solid_cable"]
+    end
   end
 end
