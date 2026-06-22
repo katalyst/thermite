@@ -1,0 +1,15 @@
+Description:
+    Installs Active Storage following Katalyst conventions, on fresh or existing apps.
+
+    Writes a Katalyst-flavoured config/storage.yml (Disk locally, S3 elsewhere) and
+    points config.active_storage.service at :s3 for every non dev/test environment.
+
+    To use the S3 service in deployed environments, add `aws-sdk-s3` to your Gemfile.
+
+Example:
+    bin/rails thermite:install:active_storage
+
+    This will:
+        Create config/storage.yml
+        Install the Active Storage migrations
+        Set the Active Storage service to :s3 (non dev/test environments)
