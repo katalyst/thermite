@@ -1,0 +1,9 @@
+.bundle/
+tmp
+log/*.log
+pkg
+.DS_Store
+/.rspec_status
+/.idea
+/.rakeTasks
+/node_modules

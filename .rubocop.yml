@@ -1,0 +1,6 @@
+plugins:
+  - rubocop-katalyst
+
+inherit_mode:
+  merge:
+    - Exclude
