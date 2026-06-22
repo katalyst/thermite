@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Minimal stand-in for a real app's production environment.
+# Smoke test for generators that should identify and configure non-standard environments
 Rails.application.configure do
   # Active Job (for thermite:install:solid_queue)
   # config.active_job.queue_adapter = :async

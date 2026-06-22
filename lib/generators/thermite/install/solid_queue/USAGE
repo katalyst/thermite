@@ -1,0 +1,18 @@
+Description:
+    Installs Solid Queue using a single, shared database (Katalyst's preferred setup).
+
+    Unlike `solid_queue:install`, this does not provision a separate queue
+    database. The solid_queue tables are added to the primary database via a
+    normal migration in db/migrate, and `config.active_job.queue_adapter` is set
+    to :solid_queue without a `connects_to` configuration.
+
+    Requires the solid_queue gem to be present in the host application.
+
+Example:
+    bin/rails thermite:install:solid_queue
+
+    This will:
+        Create config/queue.yml and config/recurring.yml
+        Create a db/migrate migration for the solid_queue tables
+        Install the bin/jobs binstub
+        Set the Active Job queue adapter to :solid_queue (non dev/test environments)
