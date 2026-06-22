@@ -4,6 +4,7 @@ source "https://rubygems.org"
 
 gemspec
 
+gem "activestorage"
 gem "rake"
 gem "rspec"
 gem "rubocop-katalyst"
