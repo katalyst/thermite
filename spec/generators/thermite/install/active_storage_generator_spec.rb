@@ -24,6 +24,29 @@ RSpec.describe Thermite::Install::ActiveStorageGenerator do
     assert_file "config/environments/staging.rb", /config\.active_storage\.service = :s3/
   end
 
+  it "installs the authenticated direct uploads controller, routes override, and spec" do
+    generator.invoke_all
+
+    assert_file "app/controllers/active_storage/authenticated_direct_uploads_controller.rb",
+                /class AuthenticatedDirectUploadsController < ActiveStorage::DirectUploadsController/
+    assert_file "config/routes/overrides.rb", %r{active_storage/authenticated_direct_uploads#create}
+    assert_file "spec/requests/active_storage/authenticated_direct_uploads_controller_spec.rb"
+  end
+
+  it "draws the routes override from config/routes.rb" do
+    generator.invoke_all
+
+    assert_file "config/routes.rb", /Rails\.application\.routes\.draw do\n  draw :overrides\n/
+  end
+
+  it "doesn't draw the routes override twice when run again" do
+    generator.invoke_all
+    generator.invoke_all
+
+    routes = File.read(File.join(destination_root, "config/routes.rb"))
+    expect(routes.scan("draw :overrides").size).to eq(1)
+  end
+
   it "installs the base migration when Active Storage isn't installed yet" do
     generator.install_migrations
 

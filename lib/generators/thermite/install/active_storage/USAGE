@@ -4,6 +4,12 @@ Description:
     Writes a Katalyst-flavoured config/storage.yml (Disk locally, S3 elsewhere) and
     points config.active_storage.service at :s3 for every non dev/test environment.
 
+    Also secures direct uploads: the POST /rails/active_storage/direct_uploads endpoint
+    is routed through an authenticated controller, and the disk service routes are
+    disabled unless storage is served from local disk. Authentication is app-specific, so
+    the controller ships locked down (every upload rejected) and the generated request
+    spec leaves the authenticated examples pending for you to complete.
+
     To use the S3 service in deployed environments, add `aws-sdk-s3` to your Gemfile.
 
 Example:
@@ -13,3 +19,10 @@ Example:
         Create config/storage.yml
         Install the Active Storage migrations
         Set the Active Storage service to :s3 (non dev/test environments)
+        Add app/controllers/active_storage/authenticated_direct_uploads_controller.rb
+        Add config/routes/overrides.rb and draw it from config/routes.rb
+        Add spec/requests/active_storage/authenticated_direct_uploads_controller_spec.rb
+
+    After running, enable uploads for your authenticated users:
+        Permit your principals in #current_user in the authenticated direct uploads controller
+        Complete the pending examples in the generated request spec
