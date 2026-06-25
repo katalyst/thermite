@@ -8,9 +8,15 @@ Description:
 
     Requires the solid_cable gem to be present in the host application.
 
+    If Action Cable was skipped when the app was generated, this installer also
+    creates the ApplicationCable base classes and re-enables the Action Cable
+    engine in config/application.rb when the framework require list is present.
+
 Example:
     bin/rails thermite:install:solid_cable
 
     This will:
+        Create app/channels/application_cable/channel.rb if missing
+        Create app/channels/application_cable/connection.rb if missing
         Create config/cable.yml
         Create a db/migrate migration for the solid_cable tables

@@ -53,6 +53,13 @@ module Thermite
         MSG
       end
 
+      def install_action_cable
+        copy_file "app/channels/application_cable/channel.rb", "app/channels/application_cable/channel.rb", skip: true
+        copy_file "app/channels/application_cable/connection.rb",
+                  "app/channels/application_cable/connection.rb", skip: true
+        require_action_cable_engine
+      end
+
       # Based on SolidCable::InstallGenerator#copy_files but writing schema to a migration instead
       # @see https://github.com/rails/solid_cable#single-database-configuration
       def copy_files
@@ -61,6 +68,22 @@ module Thermite
       end
 
       private
+
+      def require_action_cable_engine
+        application = Pathname(destination_root).join("config/application.rb")
+        return unless application.exist?
+
+        content = application.read
+        return if content.include?('require "rails/all"')
+        return if content.match?(/^\s*require "action_cable\/engine"/)
+
+        if content.match?(/^\s*#\s*require "action_cable\/engine"/)
+          uncomment_lines "config/application.rb", /require "action_cable\/engine"/
+        elsif content.match?(/^\s*require "[^"]+\/(?:railtie|engine)"/)
+          insert_into_file "config/application.rb", %(require "action_cable/engine"\n),
+                           before: /^\s*module\s+\w+/, verbose: false
+        end
+      end
 
       # The application's extra environments, derived from config/environments/*.rb so
       # we don't hard-code names like "staging" / "uat".
