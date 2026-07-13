@@ -1,0 +1,8 @@
+Description:
+    Installs the Katalyst Docker container setup.
+
+Example:
+    bin/rails generate thermite:install:docker
+
+    This creates a root Dockerfile, bin/docker-entrypoint, .dockerignore,
+    and removes the legacy Koi 4-era docker directory (if it exists)
