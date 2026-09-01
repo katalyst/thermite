@@ -1,0 +1,18 @@
+Description:
+    Installs the Katalyst Sentry configuration.
+
+    Generates config/initializers/sentry.rb with the standard errors-only
+    data posture for sentry-ruby/sentry-rails 7.x:
+
+    - structured logging disabled (no request/SQL logs sent to Sentry)
+    - explicit data_collection settings (no user info, cookies, bodies,
+      query params, or database query values)
+    - error events sanitized with the app's parameter filter
+    - CSP violations reported to Sentry when a content security policy is
+      configured (see thermite:install:content_security_policy and
+      https://docs.sentry.io/platforms/ruby/guides/rails/security-policy-reporting/)
+    - tracing and profiling off unless enabled per deployment via
+      SENTRY_TRACES_SAMPLE_RATE / SENTRY_PROFILES_SAMPLE_RATE
+
+Example:
+    bin/rails generate thermite:install:sentry

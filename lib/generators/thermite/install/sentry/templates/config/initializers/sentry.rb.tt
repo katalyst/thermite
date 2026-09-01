@@ -1,0 +1,50 @@
+# frozen_string_literal: true
+
+# Sanitize error events with the application's parameter filter
+filter   = ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters)
+sanitize = lambda do |event, _hint|
+  event.extra    = filter.filter(event.extra) if event.extra
+  event.user     = filter.filter(event.user) if event.user
+  event.contexts = filter.filter(event.contexts) if event.contexts
+  event
+end
+
+ActiveSupport.on_load(:active_record) do
+  version = Rails.root.join("VERSION")
+
+  # DSN is set via SENTRY_DSN in ENV
+  Sentry.init do |config|
+    config.enabled_environments = %w[<%= enabled_environments.join(" ") %>]
+    config.release              = File.read(version).strip.split("/").last if version.exist?
+
+    # Errors only: structured logging sends a log event for every request and
+    # SQL query. Collecting logs is a per-client data decision.
+    config.rails.structured_logging.enabled = false
+
+    # Data collection posture, based on sentry-ruby 7's `send_default_pii`
+    pii_headers = %w[forwarded -ip _ip remote via _user -user]
+
+    config.data_collection.user_info                   = false
+    config.data_collection.cookies.mode                = :off
+    config.data_collection.http_headers.request.terms  = pii_headers
+    config.data_collection.http_headers.response.terms = pii_headers
+    config.data_collection.http_bodies                 = []
+    config.data_collection.url_query_params.mode       = :off
+    config.data_collection.database_query_data         = false
+    config.data_collection.queues                      = false
+
+    config.before_send = sanitize
+
+    # Report CSP violations to Sentry (requires a content security policy)
+    # https://docs.sentry.io/platforms/ruby/guides/rails/security-policy-reporting/
+    if (policy = Rails.application.config.content_security_policy).present? && config.csp_report_uri.present?
+      policy.report_uri(config.csp_report_uri)
+    end
+
+    # Tracing and profiling, off unless enabled per deployment.
+    # Profiling requires the vernier gem.
+    config.traces_sample_rate   = ENV.fetch("SENTRY_TRACES_SAMPLE_RATE", "0").to_f
+    config.profiles_sample_rate = ENV.fetch("SENTRY_PROFILES_SAMPLE_RATE", "0").to_f
+    config.profiler_class       = Sentry::Vernier::Profiler
+  end
+end
