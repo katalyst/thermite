@@ -1,0 +1,21 @@
+Description:
+    Installs the Katalyst content security policy configuration.
+
+    Generates config/initializers/content_security_policy.rb with a
+    nonce-based policy controlled per deployment via CONTENT_SECURITY_POLICY:
+
+    - enforce (default): the policy is enforced
+    - report: policy violations are reported but not enforced — use this to
+      trial policy changes and review violations in Sentry before enforcing
+    - none: no policy header is sent — set this on existing apps that have
+      not yet reviewed the policy against their content
+
+    Violation reports are delivered to Sentry when SENTRY_DSN is set and the
+    Sentry initializer registers the report URI (see thermite:install:sentry).
+
+    See https://docs.sentry.io/platforms/ruby/guides/rails/security-policy-reporting/
+    and the project's Sentry Project Settings > SDK Setup > Security Headers page
+    (https://<org>.sentry.io/settings/projects/<project>/security-headers/).
+
+Example:
+    bin/rails generate thermite:install:content_security_policy

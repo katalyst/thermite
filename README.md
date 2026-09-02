@@ -24,6 +24,7 @@ Available installers:
 
 ```shell
 bin/rails thermite:install:active_storage
+bin/rails thermite:install:content_security_policy
 bin/rails thermite:install:docker
 bin/rails thermite:install:sentry
 bin/rails thermite:install:solid_cable
