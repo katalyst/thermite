@@ -1,0 +1,11 @@
+Description:
+    Installs the Katalyst permissions policy configuration.
+
+    Generates config/initializers/permissions_policy.rb with a restrictive
+    Permissions-Policy header: camera, microphone, geolocation, payment,
+    gyroscope, and usb are denied, and fullscreen is limited to the app
+    itself. Allow specific features (e.g. geolocation, payment) only for apps
+    that use them. The header applies as soon as it is deployed.
+
+Example:
+    bin/rails generate thermite:install:permissions_policy

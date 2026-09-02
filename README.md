@@ -26,6 +26,7 @@ Available installers:
 bin/rails thermite:install:active_storage
 bin/rails thermite:install:content_security_policy
 bin/rails thermite:install:docker
+bin/rails thermite:install:permissions_policy
 bin/rails thermite:install:sentry
 bin/rails thermite:install:solid_cable
 bin/rails thermite:install:solid_queue
