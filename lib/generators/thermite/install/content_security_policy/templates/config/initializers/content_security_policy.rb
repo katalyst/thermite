@@ -34,8 +34,9 @@ Rails.application.configure do
     # Permissive policy, many browser plugins use custom fonts
     policy.font_src(:self, :data, :https)
 
-    # Permissive policy, allow data URLs and https (hotlinking, tracking pixels)
-    policy.img_src(:self, :data, :https)
+    # Permissive policy, allow data URLs, blob URLs (upload previews, e.g.
+    # Trix), and https (hotlinking, tracking pixels)
+    policy.img_src(:self, :data, :blob, :https)
 
     # Block legacy embeds, such as flash
     policy.object_src(:none)
