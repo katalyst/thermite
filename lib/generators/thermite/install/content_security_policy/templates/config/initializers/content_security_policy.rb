@@ -38,6 +38,10 @@ Rails.application.configure do
     # Trix), and https (hotlinking, tracking pixels)
     policy.img_src(:self, :data, :blob, :https)
 
+    # Same policy as images. Active Storage redirects video/audio attachments
+    # to S3, so media-src must not fall back to default-src 'self'
+    policy.media_src(:self, :data, :blob, :https)
+
     # Block legacy embeds, such as flash
     policy.object_src(:none)
 
